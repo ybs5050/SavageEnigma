@@ -44,9 +44,9 @@
       </JFXButton>
       <JFXTextField fx:id="login_userNameTextField" focusColor="#ff2f0b" layoutX="51.0" layoutY="121.0" prefHeight="23.0" prefWidth="235.0" promptText="Username" style="-fx-background-color: #ffffff;" />
       <JFXTextField fx:id="login_passWordTextField" focusColor="#ff2f0b" layoutX="51.0" layoutY="147.0" prefHeight="23.0" prefWidth="235.0" promptText="Password" style="-fx-background-color: #ffffff;" />
-      <ImageView fitHeight="30.0" fitWidth="226.0" layoutX="51.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="37.0" fitWidth="307.0" layoutX="14.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="image/Logomakr_6TQCo3.png" />
+            <Image url="@../image/Logomakr_6TQCo3.png" />
          </image>
       </ImageView>
    </children>
