@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}IST 440W Team 6
+${licensePrefix}Project Savage Enigma
+<#if licenseLast??>
+${licenseLast}
+</#if>
