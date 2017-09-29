@@ -55,7 +55,12 @@ public class LoginController implements Initializable{
             }
         });
     }
-
+    
+    /**
+     * Show exit prompt to the user and exit the program if confirmed
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     private void login_exitProgram(ActionEvent event) throws IOException {
         
