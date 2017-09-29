@@ -1,5 +1,7 @@
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import login.LoginController;
@@ -27,7 +29,23 @@ public class app extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
+        // Loads FXML resources and create,display a FXML scene 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/login/Login.fxml"));
+        Parent root = loader.load();
+        base = primaryStage;
+        loginController = loader.getController();
+        base.setTitle("Savage Enigma");
+        login = new Scene(root);
+        base.setScene(login);
+        base.show();
+    }
+    
+    /**
+     * Main method for the execution of this application
+     * @param args None for normal use
+     */
+    public static void main(String[] args) {
+        launch();
     }
 
 }
