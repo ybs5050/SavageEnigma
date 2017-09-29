@@ -6,12 +6,29 @@
 package login;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller Class
@@ -29,6 +46,8 @@ public class LoginController implements Initializable{
     private JFXButton login_registerBtn;
     @FXML
     private JFXButton login_exitBtn;
+    @FXML
+    private AnchorPane anchorPane;
     
     /**
      * Initializes the controller class
@@ -44,6 +63,49 @@ public class LoginController implements Initializable{
                 login_userNameTextField.requestFocus();
             }
         });
+        
+        
+    }
+
+    @FXML
+    private void login_exitProgram(ActionEvent event) throws IOException {
+        
+        /*
+        // Show new scene for exit alert
+        StackPane stackPane1 = new StackPane();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(stackPane1, 300, 100));
+        stage.show();
+        */
+        
+        /*
+        // JFOENIX 
+        JFXDialogLayout content = new JFXDialogLayout();
+        content.setHeading(new Text("Exit Savage Enigma?"));
+        JFXDialog dialog = new JFXDialog(stackPane1, content, JFXDialog.DialogTransition.CENTER);
+        JFXButton okayButton = new JFXButton("Okay");
+        okayButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+                stage.close();
+                Platform.exit();
+            }
+        });
+
+        content.setActions(okayButton);
+        dialog.show();
+       */
+        
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Exit Confirmation");
+        alert.setHeaderText("Exit Savage Enigma?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            Platform.exit();
+        }   
+        
     }
     
 }

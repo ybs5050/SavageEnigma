@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.scene.text.*?>
@@ -9,9 +10,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="257.0" prefWidth="334.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="342.0" prefWidth="337.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
    <children>
-      <JFXButton fx:id="login_LoginBtn" buttonType="RAISED" layoutX="50.0" layoutY="154.0" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Login" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+      <JFXButton fx:id="login_LoginBtn" buttonType="RAISED" layoutX="51.0" layoutY="195.0" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Login" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
          <ripplerFill>
             <RadialGradient centerX="0.5" centerY="0.4857142857142857" radius="0.5">
                <stops>
@@ -21,9 +22,7 @@
             </RadialGradient>
          </ripplerFill>
       </JFXButton>
-      <JFXTextField fx:id="login_userNameTextField" focusColor="#ff2f0b" layoutX="50.0" layoutY="54.0" prefHeight="23.0" prefWidth="235.0" promptText="Username" style="-fx-background-color: #ffffff;" />
-      <JFXTextField fx:id="login_passWordTextField" focusColor="#ff2f0b" layoutX="50.0" layoutY="81.0" prefHeight="23.0" prefWidth="235.0" promptText="Password" style="-fx-background-color: #ffffff;" />
-      <JFXButton fx:id="login_registerBtn" buttonType="RAISED" layoutX="50.0" layoutY="179.0" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Register" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+      <JFXButton fx:id="login_registerBtn" buttonType="RAISED" layoutX="51.0" layoutY="221.0" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Register" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
          <ripplerFill>
             <RadialGradient centerX="0.5" centerY="0.4857142857142857" radius="0.5">
                <stops>
@@ -33,7 +32,7 @@
             </RadialGradient>
          </ripplerFill>
       </JFXButton>
-      <JFXButton fx:id="login_exitBtn" buttonType="RAISED" layoutX="50.0" layoutY="204.0" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Exit" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+      <JFXButton fx:id="login_exitBtn" buttonType="RAISED" layoutX="51.0" layoutY="247.0" onAction="#login_exitProgram" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Exit" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
          <ripplerFill>
             <RadialGradient centerX="0.5" centerY="0.4857142857142857" radius="0.5">
                <stops>
@@ -43,5 +42,12 @@
             </RadialGradient>
          </ripplerFill>
       </JFXButton>
+      <JFXTextField fx:id="login_passWordTextField" focusColor="#ff2f0b" layoutX="51.0" layoutY="147.0" prefHeight="23.0" prefWidth="235.0" promptText="Password" style="-fx-background-color: #ffffff;" />
+      <JFXTextField fx:id="login_userNameTextField" focusColor="#ff2f0b" layoutX="51.0" layoutY="121.0" prefHeight="23.0" prefWidth="235.0" promptText="Username" style="-fx-background-color: #ffffff;" />
+      <ImageView fitHeight="30.0" fitWidth="226.0" layoutX="51.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="image/Logomakr_6TQCo3.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

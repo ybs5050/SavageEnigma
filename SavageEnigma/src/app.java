@@ -37,6 +37,7 @@ public class app extends Application {
         base.setTitle("Savage Enigma");
         login = new Scene(root);
         base.setScene(login);
+        base.setResizable(false);
         base.show();
     }
     
