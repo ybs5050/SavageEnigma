@@ -69,43 +69,13 @@ public class LoginController implements Initializable{
 
     @FXML
     private void login_exitProgram(ActionEvent event) throws IOException {
-        
-        /*
-        // Show new scene for exit alert
-        StackPane stackPane1 = new StackPane();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(stackPane1, 300, 100));
-        stage.show();
-        */
-        
-        /*
-        // JFOENIX 
-        JFXDialogLayout content = new JFXDialogLayout();
-        content.setHeading(new Text("Exit Savage Enigma?"));
-        JFXDialog dialog = new JFXDialog(stackPane1, content, JFXDialog.DialogTransition.CENTER);
-        JFXButton okayButton = new JFXButton("Okay");
-        okayButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-                stage.close();
-                Platform.exit();
-            }
-        });
-
-        content.setActions(okayButton);
-        dialog.show();
-       */
-        
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Exit Confirmation");
         alert.setHeaderText("Exit Savage Enigma?");
-
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             Platform.exit();
         }   
-        
     }
     
 }
