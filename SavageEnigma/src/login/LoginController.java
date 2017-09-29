@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -57,7 +58,14 @@ public class LoginController implements Initializable{
 
     @FXML
     private void login_exitProgram(ActionEvent event) throws IOException {
+        
+        // Get scene global position
+        Bounds bounds = anchorPane.localToScreen(anchorPane.getBoundsInLocal());        
+
+        // Set location relative to the scene and show alert
         Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setX(bounds.getMinX());
+        alert.setY(bounds.getMinY());
         alert.setTitle("Exit Confirmation");
         alert.setHeaderText("Exit Savage Enigma?");
         Optional<ButtonType> result = alert.showAndWait();
