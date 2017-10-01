@@ -6,9 +6,13 @@
 package login;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -20,6 +24,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.util.Pair;
+import utility.Alerts;
+import database.Users;
+import utility.Stages;
+
 
 /**
  * FXML Controller Class
@@ -32,13 +42,13 @@ public class LoginController implements Initializable{
     @FXML
     private JFXTextField login_userNameTextField;
     @FXML
-    private JFXTextField login_passWordTextField;
-    @FXML
-    private JFXButton login_registerBtn;
+    private JFXPasswordField login_passWordTextField;
     @FXML
     private JFXButton login_exitBtn;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private JFXButton login_registerBtn;
     
     /**
      * Initializes the controller class
@@ -47,7 +57,7 @@ public class LoginController implements Initializable{
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Request focus to Login text field
+        // Request focus to the username text field
         Platform.runLater(new Runnable() {
         @Override
             public void run() {
@@ -79,4 +89,75 @@ public class LoginController implements Initializable{
         }   
     }
     
+    /**
+     * Authenticates a user
+     * @param event 
+     */
+    @FXML
+    private void login_authenticateUser(ActionEvent event) throws IOException {
+        
+        String username = login_userNameTextField.getText().trim();
+        String password = login_passWordTextField.getText().trim();
+        HashMap<Integer, String> errorMap = new HashMap<>();
+        errorMap.put(1, "Your password does not match the records \nPlease try again");
+        errorMap.put(2, "Your username does not exist in the database \nPlease try again");
+        errorMap.put(3, "Failed to establish a connection to the database \nPlease try again");
+        // Get scene global position
+        Bounds bounds = anchorPane.localToScreen(anchorPane.getBoundsInLocal());     
+        // Check if username and password field is empty and username is alphanumeric
+        if (username.isEmpty() || password.isEmpty() || !username.matches("[A-Za-z0-9]+")) {
+            Pair<Stage, JFXDialog> tempDialog = Alerts.AlertHandler.createConfirmWindow("Error", "Please check the username and password field", "Okay", null);
+            // Set window x,y coordinate
+            tempDialog.getKey().setX(bounds.getMinX());
+            tempDialog.getKey().setY(bounds.getMinY());
+            tempDialog.getKey().show();
+            tempDialog.getValue().show();
+            login_userNameTextField.clear();
+            login_passWordTextField.clear();
+            login_userNameTextField.requestFocus();
+            
+        } else {
+            try {
+                int authResult = Users.UserHandler.authenticateUser(username, password);
+                if (authResult == 0) {
+                    Pair<Stage, JFXDialog> tempDialog = Alerts.AlertHandler.createConfirmWindow("Login Success", "Welcome, " + username, "Okay", new Pair("/mainmenu/MainMenu.fxml", "Savage Enigma - Main Menu"));
+                    // Set window x,y coordinate and show alert window
+                    tempDialog.getKey().setX(bounds.getMinX());
+                    tempDialog.getKey().setY(bounds.getMinY());
+                    tempDialog.getKey().show();
+                    tempDialog.getValue().show();
+                    Stage stage = (Stage) anchorPane.getScene().getWindow();
+                    stage.close();
+                } else {
+                    Pair<Stage, JFXDialog> tempDialog = Alerts.AlertHandler.createConfirmWindow("Login Failed", errorMap.get(authResult), "Okay", null);
+                    // Set window x,y coordinate and show alert window
+                    tempDialog.getKey().setX(bounds.getMinX());
+                    tempDialog.getKey().setY(bounds.getMinY());
+                    tempDialog.getKey().show();
+                    tempDialog.getValue().show();
+                    login_userNameTextField.clear();
+                    login_passWordTextField.clear();
+                    login_userNameTextField.requestFocus();
+                }
+            } catch (SQLException except) {
+                System.out.println("Error occured: " + except.toString());
+            }
+        }      
+    }
+    
+    /**
+     * Displays a user registration stage
+     * @param event 
+     */
+    @FXML
+    private void login_registerUser(ActionEvent event) throws IOException {
+        // Get scene global position
+        Bounds bounds = anchorPane.localToScreen(anchorPane.getBoundsInLocal());
+        // Create and display registration stage
+        Stage base = Stages.StageHandler.createNewStage("/login/Register.fxml", "Savage Enigma - Create Account");
+        base.setX(bounds.getMinX());
+        base.setY(bounds.getMinY());
+        base.setResizable(false);
+        base.show();
+    }  
 }
