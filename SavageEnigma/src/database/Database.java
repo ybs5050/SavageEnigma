@@ -37,6 +37,7 @@ public class Database {
          * Used example codes from https://db.apache.org/derby/integrate/plugin_help/derby_app.html
          */
         public static void connectDatabase() throws ClassNotFoundException {
+            // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
             try {
                 Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
                 // Establish connection
@@ -55,6 +56,7 @@ public class Database {
          * Used example codes from https://db.apache.org/derby/integrate/plugin_help/derby_app.html
          */
         public static void printTable(String tableName) throws SQLException {
+            // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
             try {
                 stmt = conn.createStatement();
                 ResultSet stmtResult = stmt.executeQuery("SELECT * FROM " + "APP." + "\"" + tableName + "\"");

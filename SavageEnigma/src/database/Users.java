@@ -31,6 +31,7 @@ public class Users {
          * @throws java.sql.SQLException
          */
         public static int registerUser(String userame, String password) throws SQLException {
+            // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
             stmt = conn.createStatement();
             String statement = "INSERT INTO " + "APP.\"users\" " +
                     "VALUES (" + "DEFAULT," + "\'" + userame + "\', " + "\'" + password + "\') ";
@@ -53,6 +54,7 @@ public class Users {
          * @throws java.sql.SQLException
          */
         public static int authenticateUser(String username, String password) throws SQLException {
+            // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
             // Execute statement and see if username and password matches the database
             try {
                 stmt = conn.createStatement();
