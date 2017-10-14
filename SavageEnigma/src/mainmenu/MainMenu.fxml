@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
@@ -8,13 +9,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="mainmenu.MainMenuController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainmenu.MainMenuController">
    <children>
-      <JFXTextField focusColor="#0040ff" layoutX="13.0" layoutY="97.0" prefHeight="206.0" prefWidth="575.0" text="CURRENTLY EMPTY" unFocusColor="RED">
+      <JFXButton fx:id="mainMenu_ocr" buttonType="RAISED" layoutX="351.0" layoutY="46.0" onAction="#mainMenu_doOCR" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Parse Text From Image" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+         <ripplerFill>
+            <RadialGradient centerX="0.5" centerY="0.4857142857142857" radius="0.5">
+               <stops>
+                  <Stop color="#b92424" />
+                  <Stop color="#ff2f0b" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </ripplerFill>
+      </JFXButton>
+      <Text fill="#ff2f0b" layoutX="14.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Menu" wrappingWidth="251.142578125">
          <font>
-            <Font size="57.0" />
+            <Font size="27.0" />
          </font>
-      </JFXTextField>
+      </Text>
    </children>
 </AnchorPane>

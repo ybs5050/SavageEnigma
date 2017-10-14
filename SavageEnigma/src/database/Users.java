@@ -16,11 +16,13 @@ import java.sql.Statement;
  */
 public class Users {
     
-
     public static class UserHandler {
         
         private static Connection conn = Database.conn;
         private static Statement stmt = Database.stmt;
+        
+        // user information
+        public static int userId = 0;
         
         /**
          * Register a user function
@@ -71,6 +73,7 @@ public class Users {
                     String returnedPassword = stmtResult.getString(3);
                     if (returnedPassword.equals(password)) {
                         // Password matches
+                        userId = stmtResult.getInt(1);
                         stmtResult.close();
                         stmt.close();
                         return 0;

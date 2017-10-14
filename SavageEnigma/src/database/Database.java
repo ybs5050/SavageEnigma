@@ -25,6 +25,7 @@ public class Database {
     private static final String dbURL = "jdbc:derby://localhost:1527/savage_enigma";
     public static Connection conn = null;
     public static Statement stmt = null;
+   
     
     /**
      * Static class for handling db operations
