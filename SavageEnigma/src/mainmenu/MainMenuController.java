@@ -6,29 +6,26 @@
 package mainmenu;
 
 import com.jfoenix.controls.JFXButton;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import com.jfoenix.controls.JFXDialog;
+import database.Log;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
+import javafx.geometry.Bounds;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import ocr.Tesseract;
+import utility.Alerts;
 
 /**
  * FXML Controller Class
@@ -38,6 +35,12 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private JFXButton mainMenu_ocr;
+    @FXML
+    private TableView<Log> mainMenu_log;
+    
+    private ObservableList<Log> logList;
+    @FXML
+    private AnchorPane anchorPane;
     
     /**
      * Initializes the controller class
@@ -47,8 +50,31 @@ public class MainMenuController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("Curret user ID: " + database.Users.UserHandler.userId);
+        // Configure TableView
+        // Used example codes from https://examples.javacodegeeks.com/desktop-java/javafx/tableview/javafx-tableview-example/
+        TableColumn encryptedText = new TableColumn("Encrypted Text");
+        TableColumn decryptedText = new TableColumn("Decrypted Text");
+        mainMenu_log.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        encryptedText.setCellValueFactory(
+                new PropertyValueFactory<Log, String>("encryptedText")
+        );
+        decryptedText.setCellValueFactory(
+                new PropertyValueFactory<Log, String>("decryptedText")
+        );
+        mainMenu_log.getColumns().setAll(encryptedText, decryptedText);
+        try {
+            getAllLogs();
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.toString());
+        }
+        
     }
-
+    
+    private void getAllLogs() throws SQLException {
+        logList = database.Database.DatabaseHandler.getAllLogs();
+         mainMenu_log.setItems(logList);
+    }
+    
     /**
      * Let the user select a png file and call OCR function
      * @param event 
@@ -57,28 +83,23 @@ public class MainMenuController implements Initializable {
     private void mainMenu_doOCR(ActionEvent event) throws IOException {
         // used examples from http://code.makery.ch/blog/javafx-dialogs-official/
         Tesseract tes = new Tesseract();
-        String parsedText = tes.TesseractOCR();
-        
-        if(parsedText != null) {
-            // Allow user to correct parsed text
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Confirm Parsed Text");
-            alert.setHeaderText("Make necessary corrections");
-            TextArea textArea = new TextArea(parsedText.trim());
-            textArea.setPrefColumnCount(60);
-            textArea.setPrefRowCount(20);
-            textArea.setEditable(true);
-            textArea.setWrapText(true);
-            alert.getDialogPane().setContent(textArea);
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent()){
-                parsedText = textArea.getText().trim();
-                System.out.println("User corrected text: " + parsedText);
+        boolean result = tes.TesseractOCR();
+        // Get scene global position
+        Bounds bounds = anchorPane.localToScreen(anchorPane.getBoundsInLocal()); 
+        if (result) {
+            try {
+                getAllLogs();
+                // Show confirmation window
+                Pair<Stage, JFXDialog> tempDialog = Alerts.AlertHandler.createConfirmWindow("Text Parse Success", "Parsed Text has been added to the database", "Okay", null);
+                    // Set window x,y coordinate and show alert window
+                    tempDialog.getKey().setX(bounds.getMinX());
+                    tempDialog.getKey().setY(bounds.getMinY());
+                    tempDialog.getKey().show();
+                    tempDialog.getValue().show();
+            } catch (SQLException ex) {
+                System.out.println("Error occured: " + ex.toString());
             }
-            
-            // Add parsed text to the database
-            
         }
     }
-   
+    
 }

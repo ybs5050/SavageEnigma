@@ -11,7 +11,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 
 
@@ -87,6 +89,48 @@ public class Database {
   
             } catch (SQLException except) {
                 System.out.println("Error occured: " + except.toString());
+            }
+        }
+        
+        /**
+         * Insert parsed text to the db
+         * @param encryptedText
+         * @throws SQLException 
+         */
+        public static void insertLog(String encryptedText) throws SQLException {
+            // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
+            stmt = conn.createStatement();
+            String statement = "INSERT INTO " + "APP.\"logs\" " +
+                    "VALUES (" + "DEFAULT, " + database.Users.UserHandler.userId + ", \'" + encryptedText + "\', NULL)";
+            System.out.println(statement);
+            try {
+                stmt.execute(statement);
+                stmt.close();   
+            } catch (SQLException except) {
+                System.out.println("Error occured: " + except.toString());
+            }
+        }
+        
+        /**
+         * Fetch all logs from the db
+         * @return ObservableList<Log>
+         * @throws SQLException 
+         */
+        public static ObservableList<Log> getAllLogs() throws SQLException {
+            // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
+            ArrayList<Log> logList = new ArrayList<>();
+            stmt = conn.createStatement();
+            ResultSet stmtResult = stmt.executeQuery("SELECT * FROM APP.\"logs\"");
+            if(!stmtResult.next()) {
+                return FXCollections.observableArrayList(logList);
+            } else {
+                do {
+                    String encryptedText= stmtResult.getString(3);
+                    String decryptedText = stmtResult.getString(4);
+                    logList.add(new Log(encryptedText, decryptedText));
+                } while(stmtResult.next()) ;
+                stmt.close();
+                return FXCollections.observableArrayList(logList);
             }
         }
     }

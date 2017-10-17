@@ -9,18 +9,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Parent;
+import java.sql.SQLException;
+import java.util.Optional;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.sourceforge.tess4j.*;
@@ -45,7 +42,7 @@ public class Tesseract {
             }
         }
         
-        public String TesseractOCR() throws IOException {
+        public boolean TesseractOCR() throws IOException {
             // Used example from https://stackoverflow.com/questions/29338352/create-filechooser-in-fxml
             Stage primaryStage = null;
             FileChooser fc = new FileChooser();
@@ -53,27 +50,29 @@ public class Tesseract {
             fc.getExtensionFilters().add(filter);
             File file = fc.showOpenDialog(primaryStage);
             if(file != null) {
-                showImage(file.getAbsolutePath());
                 ITesseract instance = new Tesseract1();
                 try {
                     String result = instance.doOCR(file);
                     System.out.println("Parsed text: " + result.trim());
-                    return result;
+                    boolean confirm = confirmParse(file.getAbsolutePath(), result.trim());
+                    return confirm;
                 } catch (TesseractException e) {
                     System.out.println(e.getMessage());
-                    return null;
+                    return false;
                 }
             }
-            return null;
+            return false;
         }
         
         /**
-         * Shows a preview of a user selected image
+         * Shows a preview of a user selected image and let the user make corrections to the parsed text
          * @param path
+         * @param parsedText
+         * @return 
          * @throws IOException 
          */
-        public void showImage(String path) throws IOException {
-
+        public boolean confirmParse(String path, String parsedText) throws IOException {
+            // used example codes from http://code.makery.ch/blog/javafx-dialogs-official/
             Image image = null;
             ImageView view = new ImageView();
             BorderPane p = new BorderPane();
@@ -81,11 +80,11 @@ public class Tesseract {
             base.setTitle("Image Preview");
             try {
                 image = new Image(new FileInputStream(path));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            }   catch (FileNotFoundException e) {
+                System.out.println("Image file not found");
             }
-            base.setHeight(500);
-            base.setWidth(500);
+            base.setHeight(400);
+            base.setWidth(400);
             view.setImage(image);   
             // Fit base window
             view.fitWidthProperty().bind(base.widthProperty());
@@ -98,6 +97,41 @@ public class Tesseract {
             Scene s = new Scene(p);
             base.setScene(s);
             base.show();
+            
+            if(parsedText != null) {
+                // Allow user to correct parsed text
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirm Parsed Text");
+                alert.setHeaderText("Make necessary corrections");
+                TextArea textArea = new TextArea(parsedText.trim());
+                textArea.setPrefColumnCount(40);
+                textArea.setPrefRowCount(10);
+                textArea.setEditable(true);
+                textArea.setWrapText(true);
+                alert.getDialogPane().setContent(textArea);
+                alert.setX(base.getX()+400);
+                alert.setY(base.getY());
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    parsedText = textArea.getText().trim();
+                    System.out.println("User corrected text: " + parsedText);
+                    try {
+                        // Add parsed text to the database
+                        database.Database.DatabaseHandler.insertLog(parsedText);
+                        // Close image preview
+                        base.close();
+                        return true;
+                    } catch (SQLException ex) {
+                        System.out.println("Error occured: " + ex.toString());
+                        return false;
+                    }
+                } else {
+                    // User pressed Cancel
+                    base.close();
+                    return false;
+                }
+            }
+            return false;
         }
 }
     
