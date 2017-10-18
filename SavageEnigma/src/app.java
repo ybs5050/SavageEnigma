@@ -1,10 +1,18 @@
 
+import com.jfoenix.controls.JFXDialog;
 import database.Database;
+import java.sql.SQLException;
 import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.util.Pair;
+import utility.Alerts;
 
 /*
  * IST 440W Team 6
@@ -38,7 +46,16 @@ public class app extends Application {
         base.setResizable(false);
         base.show(); 
         // Connect to db
-        Database.DatabaseHandler.connectDatabase();
+        if (!Database.DatabaseHandler.connectDatabase()) {
+            Pair<Stage, JFXDialog> tempDialog = Alerts.AlertHandler.createConfirmWindow("Error", "Failed to connect to the database \nClosing Program", "Okay", null);
+            tempDialog.getKey().setOnHiding((WindowEvent event) -> {
+                System.out.println("Connection to db failed. Aborting");
+                base.close();
+            });
+            tempDialog.getKey().centerOnScreen();
+            tempDialog.getKey().show();
+            tempDialog.getValue().show();
+        }
     }
     
     /**

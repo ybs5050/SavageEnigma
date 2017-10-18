@@ -16,15 +16,22 @@ public class Log {
     // Java Table properties
     private SimpleStringProperty encryptedText;
     private SimpleStringProperty decryptedText;
+    private int logId;
     
     /**
      * This is the default constructor for the Log Class
-     * @param encryptedText
-     * @param decryptedText 
+     * @param logId 'ID' field in logs table
+     * @param encryptedText 'ENCRYPTED_TEXT' field in logs table
+     * @param decryptedText 'DECRYPTED_TEXT' field in logs table 
      */
-    public Log(String encryptedText, String decryptedText) {
+    public Log(int logId, String encryptedText, String decryptedText) {
+        this.logId = logId;
         this.encryptedText = new SimpleStringProperty(encryptedText);
         this.decryptedText = new SimpleStringProperty(decryptedText);
+    }
+    
+    public int getLogId() {
+        return logId;
     }
     
     public String getEncryptedText() {

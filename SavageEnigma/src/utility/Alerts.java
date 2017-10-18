@@ -41,7 +41,7 @@ public class Alerts {
             // Show new stage for exit alert
             StackPane stackPane1 = new StackPane();
             Stage stage = new Stage();
-            stage.setScene(new Scene(stackPane1, 300, 100));
+            stage.setScene(new Scene(stackPane1, 300, 90));
             stage.setTitle(title);
             
             // JFOENIX Dialog window
@@ -62,9 +62,10 @@ public class Alerts {
                         base.show();
                     } catch (IOException except) {
                         System.out.println("Error occured: " + except.toString());
-                    }              
+                     }              
                 }
             });
+            stage.resizableProperty().set(false);
             content.setActions(okayButton);
             return new Pair(stage, dialog);
         }

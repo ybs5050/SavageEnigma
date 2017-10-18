@@ -48,11 +48,8 @@ public class RegisterController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Request focus to username text field
-        Platform.runLater(new Runnable() {
-        @Override
-            public void run() {
-                register_userNameTextField.requestFocus();
-            }
+        Platform.runLater(() -> {
+            register_userNameTextField.requestFocus();
         });
     }
     

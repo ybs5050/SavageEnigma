@@ -36,10 +36,11 @@ public class Database {
         
         /**
          * Establishes a connection to the schema
+         * @return true = db connection established, false = failed to connect to db
          * @throws ClassNotFoundException 
          * Used example codes from https://db.apache.org/derby/integrate/plugin_help/derby_app.html
          */
-        public static void connectDatabase() throws ClassNotFoundException {
+        public static boolean connectDatabase() throws ClassNotFoundException {
             // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
             try {
                 Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
@@ -47,8 +48,10 @@ public class Database {
                 conn = DriverManager.getConnection(dbURL);
                 System.out.println("Connection to database established. Schema name: "
                 + conn.getSchema());
+                return true;
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException except) {
                 System.out.println("Error occured: " + except.toString());
+                return false;
             }
         }
         
@@ -86,7 +89,6 @@ public class Database {
                     stmtResult.close();
                     stmt.close();
                 }
-  
             } catch (SQLException except) {
                 System.out.println("Error occured: " + except.toString());
             }
@@ -125,12 +127,55 @@ public class Database {
                 return FXCollections.observableArrayList(logList);
             } else {
                 do {
+                    int logId = stmtResult.getInt(1);
                     String encryptedText= stmtResult.getString(3);
                     String decryptedText = stmtResult.getString(4);
-                    logList.add(new Log(encryptedText, decryptedText));
+                    logList.add(new Log(logId, encryptedText, decryptedText));
                 } while(stmtResult.next()) ;
                 stmt.close();
                 return FXCollections.observableArrayList(logList);
+            }
+        }
+        
+        /**
+         * Update log by inserting decrypted text to the existing row
+         * @param logId
+         * @param decryptedText
+         * @return true = success, false = failure
+         * @throws java.sql.SQLException
+         */
+        public static boolean updateLog(String logId, String decryptedText) throws SQLException {
+            stmt = conn.createStatement();
+            String statement = "UPDATE " + "APP.\"logs\" " +
+                    "SET DECRYPTED_TEXT = \'" + decryptedText + "\'" + " WHERE ID = " + logId;
+            System.out.println(statement);
+            try {
+                stmt.execute(statement);
+                stmt.close();
+                return true;
+            } catch (SQLException except) {
+                System.out.println("Error occured: " + except.toString());
+                return false;
+            }
+        }
+        
+        /**
+         * Deletes a user selected log(row) from the dataabase
+         * @param logId
+         * @return true = success, false = failure
+         * @throws SQLException 
+         */
+        public static boolean deleteLog(String logId) throws SQLException {
+            stmt = conn.createStatement();
+            String statement = "DELETE FROM APP.\"logs\" WHERE ID = " + logId;
+            System.out.println(statement);
+            try {
+                stmt.execute(statement);
+                stmt.close();
+                return true;
+            } catch (SQLException except) {
+                System.out.println("Error occured: " + except.toString());
+                return false;
             }
         }
     }
