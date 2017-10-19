@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import utility.Alerts;
 import database.Users;
+import java.security.NoSuchAlgorithmException;
 import utility.Stages;
 
 
@@ -94,7 +95,7 @@ public class LoginController implements Initializable{
      * @param event 
      */
     @FXML
-    private void login_authenticateUser(ActionEvent event) throws IOException {
+    private void login_authenticateUser(ActionEvent event) throws IOException, NoSuchAlgorithmException {
         
         String username = login_userNameTextField.getText().trim();
         String password = login_passWordTextField.getText().trim();

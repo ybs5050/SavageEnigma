@@ -5,6 +5,9 @@
 
 package database;
 
+import cipher.Hash;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,9 +34,13 @@ public class Users {
          * Used example codes from https://db.apache.org/derby/integrate/plugin_help/derby_app.html
          * @return 0 = Success, 1 = Username already exists
          * @throws java.sql.SQLException
+         * @throws java.security.NoSuchAlgorithmException
          */
-        public static int registerUser(String userame, String password) throws SQLException {
+        public static int registerUser(String userame, String password) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
             // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
+            Hash hash = new Hash(password);
+            password = hash.getSha1();
+            System.out.println("SHA1 Password: " + password);
             stmt = conn.createStatement();
             String statement = "INSERT INTO " + "APP.\"users\" " +
                     "VALUES (" + "DEFAULT," + "\'" + userame + "\', " + "\'" + password + "\') ";
@@ -54,10 +61,13 @@ public class Users {
          * @param password
          * @return 0 = username and password matches, 1 = password does not match, 2 = username does not exist, 3 = failed to connect to db
          * @throws java.sql.SQLException
+         * @throws java.security.NoSuchAlgorithmException
          */
-        public static int authenticateUser(String username, String password) throws SQLException {
+        public static int authenticateUser(String username, String password) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
             // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
             // Execute statement and see if username and password matches the database
+            Hash hash = new Hash(password);
+            password = hash.getSha1();
             try {
                 stmt = conn.createStatement();
                 String statement = "SELECT * FROM APP.\"users\" WHERE username = \'" + username + "\'";

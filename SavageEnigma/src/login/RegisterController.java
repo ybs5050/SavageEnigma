@@ -10,7 +10,9 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import database.Users;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -68,7 +70,7 @@ public class RegisterController implements Initializable{
      * @param event 
      */
     @FXML
-    private void register_createAccount(ActionEvent event) throws SQLException {
+    private void register_createAccount(ActionEvent event) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
         String username = register_userNameTextField.getText().trim();
         String password = register_passWordTextField.getText().trim();
         // Get scene global position
