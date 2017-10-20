@@ -76,8 +76,9 @@ public class RegisterController implements Initializable{
         // Get scene global position
         Bounds bounds = anchorPane.localToScreen(anchorPane.getBoundsInLocal()); 
         // Check if username and password field is empty and username is alphanumeric
-        if (username.isEmpty() || password.isEmpty() || !username.matches("[A-Za-z0-9]+")) {
-            Pair<Stage, JFXDialog> tempDialog = Alerts.AlertHandler.createConfirmWindow("Error", "Please check the username and password field", "Okay", null);
+        if (username.isEmpty() || password.isEmpty() || !username.matches("[A-Za-z0-9]+") || !passwordValidate(password)) {
+            Pair<Stage, JFXDialog> tempDialog = Alerts.AlertHandler.createConfirmWindow("Error", "Please check the username and password field\n"
+                    + "Password has to be at least 6 characters long\nand have at leat 1 special character\nand 1 capital letter", "Okay", null);
             // Set window x,y coordinate
             tempDialog.getKey().setX(bounds.getMinX());
             tempDialog.getKey().setY(bounds.getMinY());
@@ -110,6 +111,16 @@ public class RegisterController implements Initializable{
                 System.out.println("Error occured: " + except.toString());
             }   
         }
+    }
+    
+    /**
+     * Check if password has at least 1 capital, 1 special characters and at least 6 chracters long
+     * @param password true = yes, false = no
+     */
+    private boolean passwordValidate(String password) {
+        return password.matches("/[`!%$&^*()]+/") // At least 1 special character
+                && password.matches("/[A-Z]+/")   // At least 1 capital letter
+                && password.length() >= 6; // At least 6 characters long
     }
     
 }

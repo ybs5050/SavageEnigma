@@ -41,7 +41,7 @@ public class Alerts {
             // Show new stage for exit alert
             StackPane stackPane1 = new StackPane();
             Stage stage = new Stage();
-            stage.setScene(new Scene(stackPane1, 300, 90));
+            stage.setScene(new Scene(stackPane1, 300, 110));
             stage.setTitle(title);
             
             // JFOENIX Dialog window
