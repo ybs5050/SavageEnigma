@@ -118,9 +118,10 @@ public class RegisterController implements Initializable{
      * @param password true = yes, false = no
      */
     private boolean passwordValidate(String password) {
-        return password.matches("/[`!%$&^*()]+/") // At least 1 special character
-                && password.matches("/[A-Z]+/")   // At least 1 capital letter
-                && password.length() >= 6; // At least 6 characters long
+        if (password.matches("[a-zA-Z0-9 ]*")) return false; // no special characters inside
+        if ((password.toLowerCase().equals(password))) return false; // no capital letters
+        if (password.length() < 6) return false; // less than 6 char long
+        return true;
     }
     
 }
