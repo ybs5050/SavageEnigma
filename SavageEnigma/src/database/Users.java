@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * User table database transaction class (static)
@@ -40,10 +42,12 @@ public class Users {
             // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
             Hash hash = new Hash(password);
             password = hash.getSha1();
+            String currentDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
             System.out.println("SHA1 Password: " + password);
             stmt = conn.createStatement();
             String statement = "INSERT INTO " + "APP.\"users\" " +
-                    "VALUES (" + "DEFAULT," + "\'" + userame + "\', " + "\'" + password + "\') ";
+                    "VALUES (" + "DEFAULT, " + "\'" + userame + "\', " + "\'" + password + "\', " +
+                    "\'" + currentDate + "\', false"+ ")";
             System.out.println(statement);
             try {
                 stmt.execute(statement);

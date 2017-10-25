@@ -30,15 +30,28 @@ public class Log {
         this.decryptedText = new SimpleStringProperty(decryptedText);
     }
     
+    /**
+     * Returns this object's log table id
+     * @return logId
+     */
     public int getLogId() {
         return logId;
     }
     
+    /**
+     * Returns this object's log table ENCRYPTED_TEXT
+     * @return encryptedText
+     */
     public String getEncryptedText() {
         return encryptedText.get();
     }
     
+    /**
+     * Returns this object's log table DECRYPTED_TEXT
+     * @return decryptedText
+     */
     public String getDecryptedText() {
         return decryptedText.get();
     }
+
 }

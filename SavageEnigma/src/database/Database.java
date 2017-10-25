@@ -11,7 +11,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -99,11 +101,41 @@ public class Database {
          * @param encryptedText
          * @throws SQLException 
          */
-        public static void insertLog(String encryptedText) throws SQLException {
+        public static void insertEncryptedText(String encryptedText) throws SQLException {
             // Used example codes from https://netbeans.org/kb/docs/ide/java-db.html?print=yes
+            // Create workflow first
+            String currentDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
             stmt = conn.createStatement();
-            String statement = "INSERT INTO " + "APP.\"logs\" " +
-                    "VALUES (" + "DEFAULT, " + database.Users.UserHandler.userId + ", \'" + encryptedText + "\', NULL)";
+            String statement = "INSERT INTO " + "APP.\"workflow\" " +
+                    "VALUES (" + "DEFAULT, " + database.Users.UserHandler.userId + ", false, " + 
+                    "\'" + currentDate + "\'" + ")";
+            try {
+                stmt.execute(statement);
+                stmt.close();   
+            } catch (SQLException except) {
+                System.out.println("Error occured: " + except.toString());
+            }
+            System.out.println(statement);
+            // Get recent workflow ID
+            stmt = conn.createStatement();
+            System.out.println("SELECT * FROM APP.\"workflow\" ORDER BY ID DESC");
+            ResultSet stmtResult = stmt.executeQuery("SELECT (ID) FROM APP.\"workflow\" ORDER BY ID DESC");
+            int workflowId = 0;
+            if(stmtResult.next()) {
+                workflowId = stmtResult.getInt(1);
+            }
+            stmt.close();
+            // Insert to encrypted_text table
+            stmt = conn.createStatement();
+            statement = "INSERT INTO " + "APP.\"encrypted_text\" " + 
+                    "VALUES (" + "DEFAULT, " + workflowId + ", " + "\'" + encryptedText + "\', false, " +
+                    "\'" + currentDate + "\'" + ")";
+            System.out.println(statement);
+            // Insert to logs table
+            stmt = conn.createStatement();
+            statement = "INSERT INTO " + "APP.\"logs\" " + 
+                    "VALUES (" + "DEFAULT, " + database.Users.UserHandler.userId + ", " + workflowId + 
+                    ", " + "\'" + encryptedText + "\', NULL" + ")";
             System.out.println(statement);
             try {
                 stmt.execute(statement);
@@ -127,11 +159,11 @@ public class Database {
                 return FXCollections.observableArrayList(logList);
             } else {
                 do {
-                    int logId = stmtResult.getInt(1);
-                    String encryptedText= stmtResult.getString(3);
-                    String decryptedText = stmtResult.getString(4);
+                    int logId = stmtResult.getInt(1); // logId
+                    String encryptedText= stmtResult.getString(4); // encrypted text
+                    String decryptedText = stmtResult.getString(5); // decrypted text
                     logList.add(new Log(logId, encryptedText, decryptedText));
-                } while(stmtResult.next()) ;
+                } while(stmtResult.next());
                 stmt.close();
                 return FXCollections.observableArrayList(logList);
             }
@@ -145,8 +177,52 @@ public class Database {
          * @throws java.sql.SQLException
          */
         public static boolean updateLog(String logId, String decryptedText) throws SQLException {
+            // get WORKFLOW_ID of logs table by logId
             stmt = conn.createStatement();
-            String statement = "UPDATE " + "APP.\"logs\" " +
+            System.out.println("SELECT (WORKFLOW_ID) FROM APP.\"logs\" WHERE ID = " + logId);
+            ResultSet stmtResult = stmt.executeQuery("SELECT (WORKFLOW_ID) FROM APP.\"logs\" WHERE ID = " + logId);
+            int workflowId = 0;
+            if(stmtResult.next()) {
+                workflowId = stmtResult.getInt(1);
+            }
+            stmt.close();
+            // get ID of table encrypted_text that matches WORKFLOW_ID workflowId
+            stmt = conn.createStatement();
+            System.out.println("SELECT (ID) FROM APP.\"encryptedText\" WHERE WORKFLOW_ID = " + workflowId);
+            stmtResult = stmt.executeQuery("SELECT (ID) FROM APP.\"encrypted_text\" WHERE WORKFLOW_ID = " + workflowId);
+            int encryptedId = 0;
+            if(stmtResult.next()) {
+                encryptedId = stmtResult.getInt(1);
+            }
+            stmt.close();
+            // insert into decrypted_text table
+            String currentDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+            stmt = conn.createStatement();
+            String statement = "INSERT INTO " + "APP.\"decrypted_text\" " + 
+                    "VALUES (" + "DEFAULT, " + encryptedId + ", " + "\'" + decryptedText + "\', true, " +
+                    "\'" + currentDate + "\'" + ")";
+            System.out.println(statement);
+            try {
+                stmt.execute(statement);
+                stmt.close();
+            } catch (SQLException except) {
+                System.out.println("Error occured: " + except.toString());
+            }
+            // update encrypted_text table
+            stmt = conn.createStatement();
+            statement = "UPDATE " + "APP.\"encrypted_text\" " +
+                    "SET STATUS = true" + " WHERE ID = " + encryptedId;
+            System.out.println(statement);
+            stmt.close();
+            // update workflow table
+            stmt = conn.createStatement();
+            statement = "UPDATE " + "APP.\"workflow\" " +
+                    "SET STATUS = true" + " WHERE ID = " + workflowId;
+            System.out.println(statement);
+            stmt.close();
+            // update logs table
+            stmt = conn.createStatement();
+            statement = "UPDATE " + "APP.\"logs\" " +
                     "SET DECRYPTED_TEXT = \'" + decryptedText + "\'" + " WHERE ID = " + logId;
             System.out.println(statement);
             try {

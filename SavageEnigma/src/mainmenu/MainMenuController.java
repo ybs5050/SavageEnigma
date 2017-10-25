@@ -178,7 +178,7 @@ public class MainMenuController implements Initializable {
                     tempDialog.getKey().show();
                     tempDialog.getValue().show();
                 } else {
-                    // Update to database
+                    // Update to database          
                     String decryptedText = jfxCombo.getSelectionModel().getSelectedItem().getText();
                     System.out.println("User Selected Decrypted Text:" + decryptedText);
                     try {

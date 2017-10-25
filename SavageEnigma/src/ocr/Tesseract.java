@@ -117,7 +117,7 @@ public class Tesseract {
                     System.out.println("User corrected text: " + parsedText);
                     try {
                         // Add parsed text to the database
-                        database.Database.DatabaseHandler.insertLog(parsedText);
+                        database.Database.DatabaseHandler.insertEncryptedText(parsedText);
                         // Close image preview
                         base.close();
                         return true;
