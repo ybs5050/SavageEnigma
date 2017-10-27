@@ -46,6 +46,9 @@ public class CaesarCipher {
         }
     }
     
+    /**
+     * Decrypts the cipher
+     */
     public void decryptCipher() {
         StringBuilder sb = new StringBuilder();
         int alphabetCount = 26;

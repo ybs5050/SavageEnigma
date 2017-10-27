@@ -131,18 +131,17 @@ public class Database {
                     "VALUES (" + "DEFAULT, " + workflowId + ", " + "\'" + encryptedText + "\', false, " +
                     "\'" + currentDate + "\'" + ")";
             System.out.println(statement);
+            stmt.execute(statement);
+            stmt.close();
             // Insert to logs table
             stmt = conn.createStatement();
             statement = "INSERT INTO " + "APP.\"logs\" " + 
                     "VALUES (" + "DEFAULT, " + database.Users.UserHandler.userId + ", " + workflowId + 
                     ", " + "\'" + encryptedText + "\', NULL" + ")";
             System.out.println(statement);
-            try {
-                stmt.execute(statement);
-                stmt.close();   
-            } catch (SQLException except) {
-                System.out.println("Error occured: " + except.toString());
-            }
+            stmt.execute(statement);
+            stmt.close();   
+            
         }
         
         /**
@@ -200,39 +199,32 @@ public class Database {
             stmt = conn.createStatement();
             String statement = "INSERT INTO " + "APP.\"decrypted_text\" " + 
                     "VALUES (" + "DEFAULT, " + encryptedId + ", " + "\'" + decryptedText + "\', true, " +
-                    "\'" + currentDate + "\'" + ")";
+                    "\'" + currentDate + "\'" + ")";  
             System.out.println(statement);
-            try {
-                stmt.execute(statement);
-                stmt.close();
-            } catch (SQLException except) {
-                System.out.println("Error occured: " + except.toString());
-            }
+            stmt.execute(statement);
+            stmt.close();
             // update encrypted_text table
             stmt = conn.createStatement();
             statement = "UPDATE " + "APP.\"encrypted_text\" " +
                     "SET STATUS = true" + " WHERE ID = " + encryptedId;
             System.out.println(statement);
+            stmt.execute(statement);
             stmt.close();
             // update workflow table
             stmt = conn.createStatement();
             statement = "UPDATE " + "APP.\"workflow\" " +
                     "SET STATUS = true" + " WHERE ID = " + workflowId;
             System.out.println(statement);
+            stmt.execute(statement);
             stmt.close();
             // update logs table
             stmt = conn.createStatement();
             statement = "UPDATE " + "APP.\"logs\" " +
                     "SET DECRYPTED_TEXT = \'" + decryptedText + "\'" + " WHERE ID = " + logId;
             System.out.println(statement);
-            try {
-                stmt.execute(statement);
-                stmt.close();
-                return true;
-            } catch (SQLException except) {
-                System.out.println("Error occured: " + except.toString());
-                return false;
-            }
+            stmt.execute(statement);
+            stmt.close();
+            return true;
         }
         
         /**

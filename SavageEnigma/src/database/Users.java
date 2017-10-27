@@ -47,7 +47,7 @@ public class Users {
             stmt = conn.createStatement();
             String statement = "INSERT INTO " + "APP.\"users\" " +
                     "VALUES (" + "DEFAULT, " + "\'" + userame + "\', " + "\'" + password + "\', " +
-                    "\'" + currentDate + "\', false"+ ")";
+                    "\'" + currentDate + "\', true"+ ")";
             System.out.println(statement);
             try {
                 stmt.execute(statement);

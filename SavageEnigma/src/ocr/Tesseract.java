@@ -42,6 +42,11 @@ public class Tesseract {
             }
         }
         
+        /**
+         * Processes Optical character recognition on a png file
+         * @return
+         * @throws IOException 
+         */
         public boolean TesseractOCR() throws IOException {
             // Used example from https://stackoverflow.com/questions/29338352/create-filechooser-in-fxml
             Stage primaryStage = null;
@@ -51,6 +56,7 @@ public class Tesseract {
             File file = fc.showOpenDialog(primaryStage);
             if(file != null) {
                 ITesseract instance = new Tesseract1();
+                instance.setLanguage("eng+fra+kor+deu+spa");
                 try {
                     String result = instance.doOCR(file);
                     System.out.println("Parsed text: " + result.trim());
