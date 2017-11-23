@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="342.0" prefWidth="337.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
+   <children>
+      <JFXButton fx:id="login_LoginBtn" buttonType="RAISED" layoutX="51.0" layoutY="203.0" onAction="#login_authenticateUser" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Login" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+         <ripplerFill>
+            <RadialGradient centerX="0.5" centerY="0.4857142857142857" radius="0.5">
+               <stops>
+                  <Stop color="#b92424" />
+                  <Stop color="#ff2f0b" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </ripplerFill>
+      </JFXButton>
+      <JFXButton fx:id="login_registerBtn" buttonType="RAISED" layoutX="51.0" layoutY="229.0" onAction="#login_registerUser" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Create Account" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+         <ripplerFill>
+            <RadialGradient centerX="0.5" centerY="0.4857142857142857" radius="0.5">
+               <stops>
+                  <Stop color="#b92424" />
+                  <Stop color="#ff2f0b" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </ripplerFill>
+      </JFXButton>
+      <JFXButton fx:id="login_exitBtn" buttonType="RAISED" layoutX="51.0" layoutY="255.0" onAction="#login_exitProgram" prefHeight="23.0" prefWidth="235.0" style="-fx-background-color: #ffffff;" text="Exit" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+         <ripplerFill>
+            <RadialGradient centerX="0.5" centerY="0.4857142857142857" radius="0.5">
+               <stops>
+                  <Stop color="#b92424" />
+                  <Stop color="#ff2f0b" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </ripplerFill>
+      </JFXButton>
+      <JFXTextField fx:id="login_userNameTextField" focusColor="#ff2f0b" layoutX="51.0" layoutY="121.0" prefHeight="23.0" prefWidth="235.0" promptText="Username" style="-fx-background-color: #ffffff;" />
+      <JFXPasswordField fx:id="login_passWordTextField" focusColor="#ff2f0b" layoutX="51.0" layoutY="154.0" prefHeight="23.0" prefWidth="235.0" promptText="Password" />
+      <Text fill="#ff2f0b" layoutX="43.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Savage Engima" wrappingWidth="251.142578125">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
